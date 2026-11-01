@@ -1,0 +1,2414 @@
+{
+  "entities": [
+    {
+      "description": "Legal supplier entity (master data).",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "Supplier identifier SUP-NNNNNN.",
+          "foreign_key": null,
+          "name": "supplier_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": "Immutable; zero-padded counter."
+        },
+        {
+          "allowed_values": null,
+          "description": "Synthetic display name.",
+          "foreign_key": null,
+          "name": "supplier_name",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "ELECTRONICS",
+            "PACKAGING",
+            "RAW_MATERIALS",
+            "MECHANICAL",
+            "CHEMICALS"
+          ],
+          "description": "Primary commodity category.",
+          "foreign_key": null,
+          "name": "category",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "IN",
+            "US",
+            "DE",
+            "SG",
+            "VN",
+            "MX",
+            "CN",
+            "PL"
+          ],
+          "description": "ISO-3166 alpha-2 country of registration.",
+          "foreign_key": null,
+          "name": "country",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "STRATEGIC",
+            "PREFERRED",
+            "APPROVED"
+          ],
+          "description": "Commercial segmentation tier.",
+          "foreign_key": null,
+          "name": "supplier_tier",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Date the supplier was approved.",
+          "foreign_key": null,
+          "name": "onboarding_date",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "<= first site effective_from."
+        },
+        {
+          "allowed_values": [
+            "ACTIVE",
+            "ON_HOLD"
+          ],
+          "description": "Master-data status at extract date.",
+          "foreign_key": null,
+          "name": "status",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [],
+      "id_pattern": "^SUP-\\d{6}$",
+      "kind": "source",
+      "lifecycle": null,
+      "name": "Supplier",
+      "primary_key": "supplier_id"
+    },
+    {
+      "description": "Physical supplier site; Supplier 1:N Site (1-3 per supplier).",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "SITE-<supplier_id>-NN.",
+          "foreign_key": null,
+          "name": "site_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": "Embedded supplier ID must equal supplier_id."
+        },
+        {
+          "allowed_values": null,
+          "description": "Owning supplier.",
+          "foreign_key": "Supplier.supplier_id",
+          "name": "supplier_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Site sequence within supplier (1..3).",
+          "foreign_key": null,
+          "name": "site_seq",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": null,
+          "validation_rule": ">= 1"
+        },
+        {
+          "allowed_values": null,
+          "description": "Display name.",
+          "foreign_key": null,
+          "name": "site_name",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "MANUFACTURING",
+            "WAREHOUSE",
+            "DISTRIBUTION"
+          ],
+          "description": "Site function.",
+          "foreign_key": null,
+          "name": "site_type",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "IN",
+            "US",
+            "DE",
+            "SG",
+            "VN",
+            "MX",
+            "CN",
+            "PL"
+          ],
+          "description": "ISO-3166 alpha-2.",
+          "foreign_key": null,
+          "name": "country",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Synthetic street address.",
+          "foreign_key": null,
+          "name": "address",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": "An address belongs to exactly one supplier (no conflation)."
+        },
+        {
+          "allowed_values": null,
+          "description": "Site active from.",
+          "foreign_key": null,
+          "name": "effective_from",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": ">= Supplier.onboarding_date"
+        },
+        {
+          "allowed_values": [
+            "ACTIVE"
+          ],
+          "description": "Site status.",
+          "foreign_key": null,
+          "name": "status",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "supplier_id",
+          "references": "Supplier.supplier_id"
+        }
+      ],
+      "id_pattern": "^SITE-SUP-\\d{6}-\\d{2}$",
+      "kind": "source",
+      "lifecycle": null,
+      "name": "Site",
+      "primary_key": "site_id"
+    },
+    {
+      "description": "Supply agreement per supplier site; Site 1:N Contract.",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "CON-2026-NNNNNN.",
+          "foreign_key": null,
+          "name": "contract_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Contracting supplier.",
+          "foreign_key": "Supplier.supplier_id",
+          "name": "supplier_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Supplying site.",
+          "foreign_key": "Site.site_id",
+          "name": "site_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Site must belong to supplier_id."
+        },
+        {
+          "allowed_values": null,
+          "description": "Effective start.",
+          "foreign_key": null,
+          "name": "start_date",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "start_date < end_date"
+        },
+        {
+          "allowed_values": null,
+          "description": "Effective end.",
+          "foreign_key": null,
+          "name": "end_date",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "USD"
+          ],
+          "description": "Contract currency.",
+          "foreign_key": null,
+          "name": "currency",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Net payment terms.",
+          "foreign_key": null,
+          "name": "payment_terms_days",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": "days",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Allowed invoice/PO price variance.",
+          "foreign_key": null,
+          "name": "price_tolerance_pct",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "%",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Contracted monthly capacity.",
+          "foreign_key": null,
+          "name": "capacity_units_month",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": "units/month",
+          "validation_rule": "> 0"
+        },
+        {
+          "allowed_values": [
+            "ISO9001"
+          ],
+          "description": "Quality certification held.",
+          "foreign_key": null,
+          "name": "certification_type",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Certification expiry; lapsed if < cutoff.",
+          "foreign_key": null,
+          "name": "certification_expiry_date",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Most recent supplier audit (pre-observation).",
+          "foreign_key": null,
+          "name": "last_audit_date",
+          "required": false,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Audit result; null = no audit on file.",
+          "foreign_key": null,
+          "name": "last_audit_score",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "points 0-100",
+          "validation_rule": "0..100"
+        },
+        {
+          "allowed_values": [
+            "ACTIVE"
+          ],
+          "description": "Contract status.",
+          "foreign_key": null,
+          "name": "status",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "supplier_id",
+          "references": "Supplier.supplier_id"
+        },
+        {
+          "column": "site_id",
+          "references": "Site.site_id"
+        }
+      ],
+      "id_pattern": "^CON-2026-\\d{6}$",
+      "kind": "source",
+      "lifecycle": null,
+      "name": "Contract",
+      "primary_key": "contract_id"
+    },
+    {
+      "description": "Purchase order header; Contract 1:N PurchaseOrder.",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "PO-2026-NNNNNN (chronological).",
+          "foreign_key": null,
+          "name": "po_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Supplier.",
+          "foreign_key": "Supplier.supplier_id",
+          "name": "supplier_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Supplying site.",
+          "foreign_key": "Site.site_id",
+          "name": "site_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Site belongs to supplier."
+        },
+        {
+          "allowed_values": null,
+          "description": "Governing contract.",
+          "foreign_key": "Contract.contract_id",
+          "name": "contract_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Same supplier and site; order_date within contract dates."
+        },
+        {
+          "allowed_values": null,
+          "description": "Planner who raised the PO (PLN-NNN).",
+          "foreign_key": null,
+          "name": "planner_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Order date.",
+          "foreign_key": null,
+          "name": "order_date",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Date goods are required at the dock.",
+          "foreign_key": null,
+          "name": "required_date",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "> order_date"
+        },
+        {
+          "allowed_values": [
+            "USD"
+          ],
+          "description": "Currency.",
+          "foreign_key": null,
+          "name": "currency",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Derived: sum of POLine.line_total.",
+          "foreign_key": null,
+          "name": "total_amount",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "USD",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Derived: number of POLines.",
+          "foreign_key": null,
+          "name": "line_count",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "OPEN",
+            "PARTIALLY_RECEIVED",
+            "RECEIVED",
+            "CLOSED"
+          ],
+          "description": "Derived: latest POStatusEvent.status at extract.",
+          "foreign_key": null,
+          "name": "status",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "supplier_id",
+          "references": "Supplier.supplier_id"
+        },
+        {
+          "column": "site_id",
+          "references": "Site.site_id"
+        },
+        {
+          "column": "contract_id",
+          "references": "Contract.contract_id"
+        }
+      ],
+      "id_pattern": "^PO-2026-\\d{6}$",
+      "kind": "source",
+      "lifecycle": "OPEN -> PARTIALLY_RECEIVED -> RECEIVED -> CLOSED (OPEN -> RECEIVED allowed)",
+      "name": "PurchaseOrder",
+      "primary_key": "po_id"
+    },
+    {
+      "description": "Purchase order line; PurchaseOrder 1:N POLine (1-4).",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "POL-2026-NNNNNNN.",
+          "foreign_key": null,
+          "name": "po_line_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Parent PO.",
+          "foreign_key": "PurchaseOrder.po_id",
+          "name": "po_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Line number within PO.",
+          "foreign_key": null,
+          "name": "line_number",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Unique per po_id"
+        },
+        {
+          "allowed_values": null,
+          "description": "Synthetic item code ITEM-NNNNN.",
+          "foreign_key": null,
+          "name": "item_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Ordered quantity.",
+          "foreign_key": null,
+          "name": "ordered_qty",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": "units",
+          "validation_rule": "> 0"
+        },
+        {
+          "allowed_values": null,
+          "description": "Contract unit price.",
+          "foreign_key": null,
+          "name": "unit_price",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "USD/unit",
+          "validation_rule": "> 0"
+        },
+        {
+          "allowed_values": null,
+          "description": "Derived: round(ordered_qty * unit_price, 2).",
+          "foreign_key": null,
+          "name": "line_total",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "USD",
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "po_id",
+          "references": "PurchaseOrder.po_id"
+        }
+      ],
+      "id_pattern": "^POL-2026-\\d{7}$",
+      "kind": "source",
+      "lifecycle": null,
+      "name": "POLine",
+      "primary_key": "po_line_id"
+    },
+    {
+      "description": "Append-only PO lifecycle history (never overwritten).",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "POE-2026-NNNNNNN.",
+          "foreign_key": null,
+          "name": "po_event_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "PO.",
+          "foreign_key": "PurchaseOrder.po_id",
+          "name": "po_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Order within PO, from 1.",
+          "foreign_key": null,
+          "name": "event_seq",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "OPEN",
+            "PARTIALLY_RECEIVED",
+            "RECEIVED",
+            "CLOSED"
+          ],
+          "description": "New status.",
+          "foreign_key": null,
+          "name": "status",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Must follow PO lifecycle transitions."
+        },
+        {
+          "allowed_values": null,
+          "description": "When the transition happened.",
+          "foreign_key": null,
+          "name": "event_timestamp",
+          "required": true,
+          "type": "DATETIME",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Non-decreasing by event_seq; <= extract date."
+        },
+        {
+          "allowed_values": [
+            "PO_RELEASED",
+            "FIRST_RECEIPT",
+            "FULL_RECEIPT",
+            "ALL_INVOICED"
+          ],
+          "description": "What caused the transition.",
+          "foreign_key": null,
+          "name": "trigger",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "po_id",
+          "references": "PurchaseOrder.po_id"
+        }
+      ],
+      "id_pattern": "^POE-2026-\\d{7}$",
+      "kind": "event",
+      "lifecycle": null,
+      "name": "POStatusEvent",
+      "primary_key": "po_event_id"
+    },
+    {
+      "description": "Physical consignment; PurchaseOrder 1:N Shipment.",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "SHP-2026-NNNNNN.",
+          "foreign_key": null,
+          "name": "shipment_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Primary PO.",
+          "foreign_key": "PurchaseOrder.po_id",
+          "name": "po_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Required: a shipment without a PO is an exception."
+        },
+        {
+          "allowed_values": null,
+          "description": "Supplier.",
+          "foreign_key": "Supplier.supplier_id",
+          "name": "supplier_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Equals PO supplier."
+        },
+        {
+          "allowed_values": null,
+          "description": "Ship-from site.",
+          "foreign_key": "Site.site_id",
+          "name": "site_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Equals PO site."
+        },
+        {
+          "allowed_values": null,
+          "description": "Carrier (CARRIER-NN).",
+          "foreign_key": null,
+          "name": "carrier_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "ROAD",
+            "SEA",
+            "AIR"
+          ],
+          "description": "Mode.",
+          "foreign_key": null,
+          "name": "transport_mode",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Receiving warehouse (WH-NN).",
+          "foreign_key": null,
+          "name": "receiving_warehouse_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Shipment created (ASN).",
+          "foreign_key": null,
+          "name": "created_date",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": ">= PO order_date"
+        },
+        {
+          "allowed_values": null,
+          "description": "Derived from DISPATCHED event; null if not yet dispatched.",
+          "foreign_key": null,
+          "name": "dispatch_date",
+          "required": false,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": ">= created_date"
+        },
+        {
+          "allowed_values": null,
+          "description": "Derived from DELIVERED event; null if not delivered.",
+          "foreign_key": null,
+          "name": "delivery_date",
+          "required": false,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": ">= dispatch_date"
+        },
+        {
+          "allowed_values": null,
+          "description": "Derived: sum of ShipmentLine.shipped_qty.",
+          "foreign_key": null,
+          "name": "shipped_qty_total",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": "units",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "CREATED",
+            "IN_TRANSIT",
+            "DELAYED",
+            "DELIVERED"
+          ],
+          "description": "Derived from latest DeliveryEvent.",
+          "foreign_key": null,
+          "name": "status",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "po_id",
+          "references": "PurchaseOrder.po_id"
+        },
+        {
+          "column": "supplier_id",
+          "references": "Supplier.supplier_id"
+        },
+        {
+          "column": "site_id",
+          "references": "Site.site_id"
+        }
+      ],
+      "id_pattern": "^SHP-2026-\\d{6}$",
+      "kind": "source",
+      "lifecycle": "CREATED -> DISPATCHED -> IN_TRANSIT -> [DELAYED ->] DELIVERED",
+      "name": "Shipment",
+      "primary_key": "shipment_id"
+    },
+    {
+      "description": "Bridge table Shipment N:M POLine (a line may be split across shipments).",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "SHL-2026-NNNNNNN.",
+          "foreign_key": null,
+          "name": "shipment_line_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Shipment.",
+          "foreign_key": "Shipment.shipment_id",
+          "name": "shipment_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "PO line.",
+          "foreign_key": "POLine.po_line_id",
+          "name": "po_line_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "PO line belongs to the shipment's PO; (shipment_id, po_line_id) unique."
+        },
+        {
+          "allowed_values": null,
+          "description": "Units of the line on this shipment.",
+          "foreign_key": null,
+          "name": "shipped_qty",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": "units",
+          "validation_rule": "> 0; sum per line <= ordered_qty"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "shipment_id",
+          "references": "Shipment.shipment_id"
+        },
+        {
+          "column": "po_line_id",
+          "references": "POLine.po_line_id"
+        }
+      ],
+      "id_pattern": "^SHL-2026-\\d{7}$",
+      "kind": "bridge",
+      "lifecycle": null,
+      "name": "ShipmentLine",
+      "primary_key": "shipment_line_id"
+    },
+    {
+      "description": "Append-only shipment tracking events from carriers/warehouses.",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "DEV-2026-NNNNNNN.",
+          "foreign_key": null,
+          "name": "delivery_event_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Shipment.",
+          "foreign_key": "Shipment.shipment_id",
+          "name": "shipment_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Order within shipment, from 1.",
+          "foreign_key": null,
+          "name": "event_seq",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "CREATED",
+            "DISPATCHED",
+            "IN_TRANSIT",
+            "DELAYED",
+            "DELIVERED"
+          ],
+          "description": "Lifecycle event.",
+          "foreign_key": null,
+          "name": "event_type",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Must follow shipment lifecycle transitions."
+        },
+        {
+          "allowed_values": null,
+          "description": "Event time.",
+          "foreign_key": null,
+          "name": "event_timestamp",
+          "required": true,
+          "type": "DATETIME",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Non-decreasing by event_seq; <= extract date."
+        },
+        {
+          "allowed_values": [
+            "SUPPLIER",
+            "CARRIER",
+            "WAREHOUSE"
+          ],
+          "description": "Actor that recorded the event.",
+          "foreign_key": null,
+          "name": "recorded_by",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Site, carrier or warehouse code.",
+          "foreign_key": null,
+          "name": "location",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "shipment_id",
+          "references": "Shipment.shipment_id"
+        }
+      ],
+      "id_pattern": "^DEV-2026-\\d{7}$",
+      "kind": "event",
+      "lifecycle": null,
+      "name": "DeliveryEvent",
+      "primary_key": "delivery_event_id"
+    },
+    {
+      "description": "Incoming quality inspection of a delivered shipment; Shipment 1:N Inspection.",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "INS-2026-NNNNNNN.",
+          "foreign_key": null,
+          "name": "inspection_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Inspected shipment.",
+          "foreign_key": "Shipment.shipment_id",
+          "name": "shipment_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Inspection lot within the shipment, from 1.",
+          "foreign_key": null,
+          "name": "lot_number",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "(shipment_id, lot_number) unique"
+        },
+        {
+          "allowed_values": null,
+          "description": "Supplier.",
+          "foreign_key": "Supplier.supplier_id",
+          "name": "supplier_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Equals shipment supplier."
+        },
+        {
+          "allowed_values": null,
+          "description": "Inspector (QA-NN).",
+          "foreign_key": null,
+          "name": "inspector_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Inspection date.",
+          "foreign_key": null,
+          "name": "inspection_date",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": ">= shipment delivery_date"
+        },
+        {
+          "allowed_values": null,
+          "description": "Sample size.",
+          "foreign_key": null,
+          "name": "inspected_qty",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": "units",
+          "validation_rule": "> 0; <= shipment shipped_qty_total"
+        },
+        {
+          "allowed_values": null,
+          "description": "Accepted units.",
+          "foreign_key": null,
+          "name": "accepted_qty",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": "units",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Rejected units.",
+          "foreign_key": null,
+          "name": "rejected_qty",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": "units",
+          "validation_rule": "accepted + rejected = inspected"
+        },
+        {
+          "allowed_values": [
+            "NONE",
+            "DIMENSIONAL",
+            "COSMETIC",
+            "FUNCTIONAL",
+            "PACKAGING",
+            "DOCUMENTATION"
+          ],
+          "description": "Dominant defect.",
+          "foreign_key": null,
+          "name": "defect_code",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "NONE iff rejected_qty = 0"
+        },
+        {
+          "allowed_values": [
+            "ACCEPTED",
+            "ACCEPTED_WITH_DEVIATION",
+            "REJECTED"
+          ],
+          "description": "Derived from reject rate (0 / <=5% / >5%).",
+          "foreign_key": null,
+          "name": "result",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "shipment_id",
+          "references": "Shipment.shipment_id"
+        },
+        {
+          "column": "supplier_id",
+          "references": "Supplier.supplier_id"
+        }
+      ],
+      "id_pattern": "^INS-2026-\\d{7}$",
+      "kind": "source",
+      "lifecycle": null,
+      "name": "Inspection",
+      "primary_key": "inspection_id"
+    },
+    {
+      "description": "Supplier invoice; Shipment 1:0..1 Invoice.",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "INV-2026-NNNNNN.",
+          "foreign_key": null,
+          "name": "invoice_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Invoiced shipment.",
+          "foreign_key": "Shipment.shipment_id",
+          "name": "shipment_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "PO.",
+          "foreign_key": "PurchaseOrder.po_id",
+          "name": "po_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Equals shipment PO."
+        },
+        {
+          "allowed_values": null,
+          "description": "Supplier.",
+          "foreign_key": "Supplier.supplier_id",
+          "name": "supplier_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Equals shipment supplier."
+        },
+        {
+          "allowed_values": null,
+          "description": "Invoice date.",
+          "foreign_key": null,
+          "name": "invoice_date",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": ">= shipment delivery_date"
+        },
+        {
+          "allowed_values": null,
+          "description": "Derived: invoice_date + contract payment terms.",
+          "foreign_key": null,
+          "name": "due_date",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "USD"
+          ],
+          "description": "Currency.",
+          "foreign_key": null,
+          "name": "currency",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Derived: sum(shipped_qty * unit_price) for the shipment.",
+          "foreign_key": null,
+          "name": "expected_amount",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "USD",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Amount billed by supplier.",
+          "foreign_key": null,
+          "name": "invoiced_amount",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "USD",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Derived: invoiced_amount - expected_amount.",
+          "foreign_key": null,
+          "name": "variance_amount",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "USD",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Derived: variance_amount / expected_amount * 100.",
+          "foreign_key": null,
+          "name": "variance_pct",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "%",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "MATCHED",
+            "PRICE_VARIANCE"
+          ],
+          "description": "Derived: |variance_pct| <= contract tolerance.",
+          "foreign_key": null,
+          "name": "match_status",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "shipment_id",
+          "references": "Shipment.shipment_id"
+        },
+        {
+          "column": "po_id",
+          "references": "PurchaseOrder.po_id"
+        },
+        {
+          "column": "supplier_id",
+          "references": "Supplier.supplier_id"
+        }
+      ],
+      "id_pattern": "^INV-2026-\\d{6}$",
+      "kind": "source",
+      "lifecycle": null,
+      "name": "Invoice",
+      "primary_key": "invoice_id"
+    },
+    {
+      "description": "Timestamped disruption / risk signal; Supplier 1:N RiskSignal.",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "RSK-<supplier_id>-2026-NN (per-supplier sequence).",
+          "foreign_key": null,
+          "name": "risk_signal_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": "Embedded supplier ID equals supplier_id."
+        },
+        {
+          "allowed_values": null,
+          "description": "Affected supplier.",
+          "foreign_key": "Supplier.supplier_id",
+          "name": "supplier_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "WEATHER",
+            "PORT_CONGESTION",
+            "LABOR_STRIKE",
+            "FINANCIAL_DISTRESS",
+            "REGULATORY",
+            "GEOPOLITICAL",
+            "CYBER"
+          ],
+          "description": "Signal category.",
+          "foreign_key": null,
+          "name": "risk_type",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "LOW",
+            "MEDIUM",
+            "HIGH"
+          ],
+          "description": "Severity.",
+          "foreign_key": null,
+          "name": "severity",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "When the signal was observed.",
+          "foreign_key": null,
+          "name": "signal_timestamp",
+          "required": true,
+          "type": "DATETIME",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Required for provenance."
+        },
+        {
+          "allowed_values": [
+            "NEWS_FEED",
+            "CARRIER_ALERT",
+            "SUPPLIER_SELF_REPORT",
+            "ANALYST_ENTRY",
+            "REGULATORY_DB"
+          ],
+          "description": "Signal provenance.",
+          "foreign_key": null,
+          "name": "source",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "Required for provenance."
+        },
+        {
+          "allowed_values": null,
+          "description": "When resolved; null = still open.",
+          "foreign_key": null,
+          "name": "resolved_timestamp",
+          "required": false,
+          "type": "DATETIME",
+          "unique": false,
+          "unit": null,
+          "validation_rule": ">= signal_timestamp"
+        },
+        {
+          "allowed_values": [
+            "OPEN",
+            "RESOLVED"
+          ],
+          "description": "Derived at extract date.",
+          "foreign_key": null,
+          "name": "status",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "supplier_id",
+          "references": "Supplier.supplier_id"
+        }
+      ],
+      "id_pattern": "^RSK-SUP-\\d{6}-2026-\\d{2}$",
+      "kind": "event",
+      "lifecycle": null,
+      "name": "RiskSignal",
+      "primary_key": "risk_signal_id"
+    },
+    {
+      "description": "Point-in-time reliability score; Supplier 1:N SupplierScore (one per cutoff per run).",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "SCORE-2026-NNNNNN.",
+          "foreign_key": null,
+          "name": "score_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Scoring run (RUN-YYYY-MM-DD or ADHOC-...).",
+          "foreign_key": null,
+          "name": "score_run_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Scored supplier.",
+          "foreign_key": "Supplier.supplier_id",
+          "name": "supplier_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Scoring model version.",
+          "foreign_key": null,
+          "name": "model_version",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Cutoff date (end of day); only data on/before it may be used.",
+          "foreign_key": null,
+          "name": "score_timestamp",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Start of the look-back window.",
+          "foreign_key": null,
+          "name": "observation_start",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Latest source date actually used.",
+          "foreign_key": null,
+          "name": "max_source_date",
+          "required": false,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": "<= score_timestamp (no future data)"
+        },
+        {
+          "allowed_values": null,
+          "description": "On-time delivery %.",
+          "foreign_key": null,
+          "name": "delivery_score",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "points 0-100",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "100 - 5 x reject %.",
+          "foreign_key": null,
+          "name": "quality_score",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "points 0-100",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "100 - 10 x absolute invoice variance %.",
+          "foreign_key": null,
+          "name": "cost_score",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "points 0-100",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "% of active months within contracted capacity.",
+          "foreign_key": null,
+          "name": "capacity_score",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "points 0-100",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Audit score less certification/regulatory penalties.",
+          "foreign_key": null,
+          "name": "compliance_score",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "points 0-100",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "100 - severity-weighted risk penalties.",
+          "foreign_key": null,
+          "name": "disruption_score",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "points 0-100",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Sum of weights of available components x 100.",
+          "foreign_key": null,
+          "name": "data_coverage_pct",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "%",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Semicolon list of MISSING components.",
+          "foreign_key": null,
+          "name": "components_missing",
+          "required": false,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Weighted mean of available components (weights renormalised).",
+          "foreign_key": null,
+          "name": "reliability_score",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "points 0-100",
+          "validation_rule": "= sum of component weighted_contribution"
+        },
+        {
+          "allowed_values": [
+            "HIGH",
+            "MEDIUM",
+            "LOW",
+            "INSUFFICIENT_DATA"
+          ],
+          "description": "HIGH >=85, MEDIUM >=70, LOW; INSUFFICIENT_DATA if coverage < 60% or < 3 components.",
+          "foreign_key": null,
+          "name": "reliability_tier",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "APPROVED",
+            "MONITOR",
+            "ESCALATE",
+            "REVIEW_DATA"
+          ],
+          "description": "Recommended action.",
+          "foreign_key": null,
+          "name": "decision",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Two components losing the most weighted points.",
+          "foreign_key": null,
+          "name": "top_drivers",
+          "required": false,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "HIGH-severity risk signals open at cutoff.",
+          "foreign_key": null,
+          "name": "open_high_risks",
+          "required": true,
+          "type": "INTEGER",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Counts of source records used per entity.",
+          "foreign_key": null,
+          "name": "source_record_counts",
+          "required": true,
+          "type": "JSON",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "supplier_id",
+          "references": "Supplier.supplier_id"
+        }
+      ],
+      "id_pattern": "^SCORE-2026-\\d{6}$",
+      "kind": "derived",
+      "lifecycle": null,
+      "name": "SupplierScore",
+      "primary_key": "score_id"
+    },
+    {
+      "description": "Explainability: one row per score x component with numerator/denominator.",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "SCC-2026-NNNNNNN.",
+          "foreign_key": null,
+          "name": "score_component_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Parent score.",
+          "foreign_key": "SupplierScore.score_id",
+          "name": "score_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "delivery",
+            "quality",
+            "cost",
+            "capacity",
+            "compliance",
+            "disruption"
+          ],
+          "description": "Component name.",
+          "foreign_key": null,
+          "name": "component",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "OK",
+            "MISSING"
+          ],
+          "description": "OK or MISSING (below minimum evidence).",
+          "foreign_key": null,
+          "name": "status",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Metric numerator (see denominator_definition).",
+          "foreign_key": null,
+          "name": "numerator",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Metric denominator.",
+          "foreign_key": null,
+          "name": "denominator",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "What the denominator counts.",
+          "foreign_key": null,
+          "name": "denominator_definition",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Raw metric (e.g. on-time %, reject %).",
+          "foreign_key": null,
+          "name": "metric_value",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Penalty points applied after the metric (compliance only).",
+          "foreign_key": null,
+          "name": "adjustment",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "points",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "How component_score is derived from metric_value.",
+          "foreign_key": null,
+          "name": "formula",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Normalised 0-100 score.",
+          "foreign_key": null,
+          "name": "component_score",
+          "required": false,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "points 0-100",
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Configured weight.",
+          "foreign_key": null,
+          "name": "base_weight",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Renormalised weight (0 if MISSING).",
+          "foreign_key": null,
+          "name": "effective_weight",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "effective_weight x component_score.",
+          "foreign_key": null,
+          "name": "weighted_contribution",
+          "required": true,
+          "type": "DECIMAL",
+          "unique": false,
+          "unit": "points",
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "score_id",
+          "references": "SupplierScore.score_id"
+        }
+      ],
+      "id_pattern": "^SCC-2026-\\d{7}$",
+      "kind": "derived",
+      "lifecycle": null,
+      "name": "SupplierScoreComponent",
+      "primary_key": "score_component_id"
+    },
+    {
+      "description": "Records quarantined by the scoring engine's own rules (exception path).",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "EXC-2026-NNNNNN.",
+          "foreign_key": null,
+          "name": "exception_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "SHP_NO_PO",
+            "SHP_DATE_ORDER",
+            "RSK_PROVENANCE",
+            "SITE_CONFLATION"
+          ],
+          "description": "Detection rule.",
+          "foreign_key": null,
+          "name": "rule_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Entity of the quarantined record.",
+          "foreign_key": null,
+          "name": "entity",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Quarantined record ID.",
+          "foreign_key": null,
+          "name": "record_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Supplier (as recorded on the row).",
+          "foreign_key": null,
+          "name": "supplier_id",
+          "required": false,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Human-readable reason.",
+          "foreign_key": null,
+          "name": "reason",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "EXCLUDED_FROM_SCORING"
+          ],
+          "description": "Engine action.",
+          "foreign_key": null,
+          "name": "action",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "LOGISTICS_ANALYST",
+            "PLANNER",
+            "OPERATIONS_MANAGER"
+          ],
+          "description": "Actor that must resolve it.",
+          "foreign_key": null,
+          "name": "assigned_role",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Run date (extract date).",
+          "foreign_key": null,
+          "name": "detected_at",
+          "required": true,
+          "type": "DATE",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "OPEN"
+          ],
+          "description": "Workflow status.",
+          "foreign_key": null,
+          "name": "status",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [],
+      "id_pattern": "^EXC-2026-\\d{6}$",
+      "kind": "output",
+      "lifecycle": null,
+      "name": "ExceptionLog",
+      "primary_key": "exception_id"
+    },
+    {
+      "description": "Labelled injected anomalies (ground_truth/). Never an input to scoring.",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "GT-2026-NNNNN.",
+          "foreign_key": null,
+          "name": "gt_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "SHIPMENT_NO_PO",
+            "DELIVERY_BEFORE_DISPATCH",
+            "SCORE_USES_FUTURE_DATA",
+            "RISK_NO_SOURCE_OR_TIME",
+            "SITE_CONFLATION"
+          ],
+          "description": "Injected edge case.",
+          "foreign_key": null,
+          "name": "issue_type",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Entity holding the anomalous record.",
+          "foreign_key": null,
+          "name": "entity",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Anomalous record ID.",
+          "foreign_key": null,
+          "name": "record_id",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Supplier involved.",
+          "foreign_key": null,
+          "name": "supplier_id",
+          "required": false,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "NEW_ROW",
+            "MUTATED_ROW"
+          ],
+          "description": "NEW_ROW or MUTATED_ROW.",
+          "foreign_key": null,
+          "name": "injection_method",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Affected field(s).",
+          "foreign_key": null,
+          "name": "field",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Value before mutation (MUTATED_ROW).",
+          "foreign_key": null,
+          "name": "original_value",
+          "required": false,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Anomalous value.",
+          "foreign_key": null,
+          "name": "injected_value",
+          "required": false,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Validation rule expected to fire.",
+          "foreign_key": null,
+          "name": "expected_detection",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Expected engine/analyst decision.",
+          "foreign_key": null,
+          "name": "expected_decision",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [],
+      "id_pattern": "^GT-2026-\\d{5}$",
+      "kind": "ground_truth",
+      "lifecycle": null,
+      "name": "GroundTruth",
+      "primary_key": "gt_id"
+    },
+    {
+      "description": "Hidden behavioural profile per supplier (ground_truth/). Never an input to scoring.",
+      "fields": [
+        {
+          "allowed_values": null,
+          "description": "Supplier.",
+          "foreign_key": "Supplier.supplier_id",
+          "name": "supplier_id",
+          "required": true,
+          "type": "STRING",
+          "unique": true,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "STABLE",
+            "DETERIORATING",
+            "QUALITY_INCIDENT",
+            "SPARSE",
+            "CAPACITY_STRAINED"
+          ],
+          "description": "Generation profile.",
+          "foreign_key": null,
+          "name": "profile",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "LOW_RISK",
+            "AT_RISK",
+            "UNKNOWN"
+          ],
+          "description": "Rule: STABLE->LOW_RISK; SPARSE->UNKNOWN; others->AT_RISK.",
+          "foreign_key": null,
+          "name": "risk_class",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": null,
+          "description": "Documented generation rule.",
+          "foreign_key": null,
+          "name": "expected_pattern",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        },
+        {
+          "allowed_values": [
+            "APPROVED_OR_MONITOR",
+            "MONITOR_OR_ESCALATE",
+            "REVIEW_DATA"
+          ],
+          "description": "Decision the documented rules should lead to at the final cutoff.",
+          "foreign_key": null,
+          "name": "expected_final_decision",
+          "required": true,
+          "type": "STRING",
+          "unique": false,
+          "unit": null,
+          "validation_rule": null
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "supplier_id",
+          "references": "Supplier.supplier_id"
+        }
+      ],
+      "id_pattern": null,
+      "kind": "ground_truth",
+      "lifecycle": null,
+      "name": "SupplierProfileLabel",
+      "primary_key": "supplier_id"
+    }
+  ],
+  "relationships": [
+    {
+      "cardinality": "1:N",
+      "child": "Site",
+      "note": "Each site belongs to exactly one supplier; supplier has 1-3 sites.",
+      "parent": "Supplier"
+    },
+    {
+      "cardinality": "1:N",
+      "child": "Contract",
+      "note": "Via site; one active contract per site.",
+      "parent": "Supplier"
+    },
+    {
+      "cardinality": "1:N",
+      "child": "Contract",
+      "note": "Contract is scoped to one site.",
+      "parent": "Site"
+    },
+    {
+      "cardinality": "1:N",
+      "child": "PurchaseOrder",
+      "note": "PO raised under one contract; order_date within effective dates.",
+      "parent": "Contract"
+    },
+    {
+      "cardinality": "1:N",
+      "child": "POLine",
+      "note": "1-4 lines per PO.",
+      "parent": "PurchaseOrder"
+    },
+    {
+      "cardinality": "1:N",
+      "child": "POStatusEvent",
+      "note": "Append-only lifecycle history.",
+      "parent": "PurchaseOrder"
+    },
+    {
+      "cardinality": "1:N",
+      "child": "Shipment",
+      "note": "Split deliveries allowed; Shipment.po_id required.",
+      "parent": "PurchaseOrder"
+    },
+    {
+      "cardinality": "N:M",
+      "child": "POLine",
+      "note": "Bridge ShipmentLine: a shipment carries several lines; a line can be split.",
+      "parent": "Shipment"
+    },
+    {
+      "cardinality": "1:N",
+      "child": "DeliveryEvent",
+      "note": "Append-only tracking events.",
+      "parent": "Shipment"
+    },
+    {
+      "cardinality": "1:N (optional)",
+      "child": "Inspection",
+      "note": "0..n inspections; only after delivery.",
+      "parent": "Shipment"
+    },
+    {
+      "cardinality": "1:0..1",
+      "child": "Invoice",
+      "note": "At most one invoice per shipment; optional (may be missing).",
+      "parent": "Shipment"
+    },
+    {
+      "cardinality": "1:N (optional)",
+      "child": "RiskSignal",
+      "note": "0..n signals.",
+      "parent": "Supplier"
+    },
+    {
+      "cardinality": "1:N",
+      "child": "SupplierScore",
+      "note": "One score per supplier per cutoff per run.",
+      "parent": "Supplier"
+    },
+    {
+      "cardinality": "1:6",
+      "child": "SupplierScoreComponent",
+      "note": "Exactly six components per score.",
+      "parent": "SupplierScore"
+    }
+  ]
+}

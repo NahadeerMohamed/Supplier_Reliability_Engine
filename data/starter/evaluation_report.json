@@ -1,0 +1,301 @@
+{
+  "distributions": {
+    "days_late_when_late": {
+      "mean": 3.6,
+      "p90": 8.0
+    },
+    "inspection_result": {
+      "ACCEPTED": 472,
+      "ACCEPTED_WITH_DEVIATION": 428,
+      "REJECTED": 100
+    },
+    "invoice_coverage_of_delivered": 0.9799,
+    "invoice_match_status": {
+      "MATCHED": 662,
+      "PRICE_VARIANCE": 68
+    },
+    "lead_time_days": {
+      "mean": 18.23,
+      "p10": 9.0,
+      "p50": 18.0,
+      "p90": 27.0
+    },
+    "lines_per_po": {
+      "1": 190,
+      "2": 155,
+      "3": 96,
+      "4": 59
+    },
+    "on_time_rate": 0.783,
+    "po_status": {
+      "CLOSED": 484,
+      "OPEN": 5,
+      "RECEIVED": 11
+    },
+    "po_total_amount_usd": {
+      "p50": 46490.77,
+      "p90": 115280.38
+    },
+    "risk_severity": {
+      "HIGH": 9,
+      "LOW": 40,
+      "MEDIUM": 21
+    },
+    "shipment_status": {
+      "CREATED": 3,
+      "DELAYED": 3,
+      "DELIVERED": 745,
+      "IN_TRANSIT": 2
+    },
+    "shipments_per_po": {
+      "1": 299,
+      "2": 165,
+      "3": 28,
+      "4": 7,
+      "5": 2
+    },
+    "sites_per_supplier": {
+      "1": 25,
+      "2": 15,
+      "3": 9,
+      "4": 1
+    },
+    "unit_reject_rate": 0.0269
+  },
+  "missing_data": {
+    "component_missing_rate": {
+      "capacity": 0.155,
+      "compliance": 0.04,
+      "cost": 0.14,
+      "delivery": 0.17,
+      "disruption": 0.0,
+      "quality": 0.125
+    },
+    "component_missing_rate_by_profile": {
+      "CAPACITY_STRAINED": 0.0,
+      "DETERIORATING": 0.0156,
+      "QUALITY_INCIDENT": 0.0573,
+      "SPARSE": 0.6979,
+      "STABLE": 0.0647
+    },
+    "imputation": "none - MISSING components carry effective_weight 0 and are listed in components_missing",
+    "scores_insufficient_data": 29
+  },
+  "quarantine_vs_ground_truth": {
+    "by_assigned_role": {
+      "LOGISTICS_ANALYST": 9,
+      "OPERATIONS_MANAGER": 3
+    },
+    "by_rule": {
+      "RSK_PROVENANCE": 3,
+      "SHP_DATE_ORDER": 3,
+      "SHP_NO_PO": 3,
+      "SITE_CONFLATION": 3
+    },
+    "exceptions_logged": 12,
+    "per_issue_type": {
+      "DELIVERY_BEFORE_DISPATCH": {
+        "injected": 3,
+        "quarantined": 3,
+        "recall": 1.0
+      },
+      "RISK_NO_SOURCE_OR_TIME": {
+        "injected": 3,
+        "quarantined": 3,
+        "recall": 1.0
+      },
+      "SHIPMENT_NO_PO": {
+        "injected": 3,
+        "quarantined": 3,
+        "recall": 1.0
+      },
+      "SITE_CONFLATION": {
+        "injected": 3,
+        "quarantined": 3,
+        "recall": 1.0
+      }
+    },
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  "score_validity": {
+    "auc_stable_vs_at_risk": 0.9919,
+    "by_profile": {
+      "CAPACITY_STRAINED": {
+        "decision_agreement": 1.0,
+        "insufficient_rate": 0.0,
+        "mean_coverage_pct": 100.0,
+        "mean_reliability": 72.01,
+        "suppliers": 1.0
+      },
+      "DETERIORATING": {
+        "decision_agreement": 1.0,
+        "insufficient_rate": 0.0,
+        "mean_coverage_pct": 100.0,
+        "mean_reliability": 67.09,
+        "suppliers": 8.0
+      },
+      "QUALITY_INCIDENT": {
+        "decision_agreement": 0.875,
+        "insufficient_rate": 0.0,
+        "mean_coverage_pct": 100.0,
+        "mean_reliability": 73.19,
+        "suppliers": 8.0
+      },
+      "SPARSE": {
+        "decision_agreement": 0.75,
+        "insufficient_rate": 0.75,
+        "mean_coverage_pct": 36.25,
+        "mean_reliability": 97.1875,
+        "suppliers": 4.0
+      },
+      "STABLE": {
+        "decision_agreement": 1.0,
+        "insufficient_rate": 0.0,
+        "mean_coverage_pct": 100.0,
+        "mean_reliability": 93.0793,
+        "suppliers": 29.0
+      }
+    },
+    "decision_agreement_with_expected": 0.96,
+    "decision_matrix": {
+      "CAPACITY_STRAINED": {
+        "APPROVED": 0,
+        "ESCALATE": 0,
+        "MONITOR": 1,
+        "REVIEW_DATA": 0
+      },
+      "DETERIORATING": {
+        "APPROVED": 0,
+        "ESCALATE": 5,
+        "MONITOR": 3,
+        "REVIEW_DATA": 0
+      },
+      "QUALITY_INCIDENT": {
+        "APPROVED": 1,
+        "ESCALATE": 4,
+        "MONITOR": 3,
+        "REVIEW_DATA": 0
+      },
+      "SPARSE": {
+        "APPROVED": 1,
+        "ESCALATE": 0,
+        "MONITOR": 0,
+        "REVIEW_DATA": 3
+      },
+      "STABLE": {
+        "APPROVED": 29,
+        "ESCALATE": 0,
+        "MONITOR": 0,
+        "REVIEW_DATA": 0
+      }
+    },
+    "deteriorating_share_declining": 1.0,
+    "final_cutoff": "2026-10-31",
+    "mean_delivery_score_by_cutoff": {
+      "CAPACITY_STRAINED": {
+        "2026-03-31": 70.0,
+        "2026-06-30": 60.87,
+        "2026-09-30": 58.62,
+        "2026-10-31": 64.0
+      },
+      "DETERIORATING": {
+        "2026-03-31": 75.48,
+        "2026-06-30": 57.51,
+        "2026-09-30": 20.22,
+        "2026-10-31": 15.62
+      },
+      "QUALITY_INCIDENT": {
+        "2026-03-31": 70.89,
+        "2026-06-30": 74.58,
+        "2026-09-30": 79.06,
+        "2026-10-31": 77.78
+      },
+      "SPARSE": {
+        "2026-03-31": null,
+        "2026-06-30": null,
+        "2026-09-30": null,
+        "2026-10-31": 100.0
+      },
+      "STABLE": {
+        "2026-03-31": 97.66,
+        "2026-06-30": 91.72,
+        "2026-09-30": 89.47,
+        "2026-10-31": 87.68
+      }
+    },
+    "mean_reliability_at_risk": 70.25,
+    "mean_reliability_stable": 93.08,
+    "mean_worst_quality_score_by_profile": {
+      "CAPACITY_STRAINED": 82.41,
+      "DETERIORATING": 87.26,
+      "QUALITY_INCIDENT": 31.84,
+      "SPARSE": null,
+      "STABLE": 94.56
+    },
+    "tier_matrix": {
+      "CAPACITY_STRAINED": {
+        "HIGH": 0,
+        "INSUFFICIENT_DATA": 0,
+        "LOW": 0,
+        "MEDIUM": 1
+      },
+      "DETERIORATING": {
+        "HIGH": 0,
+        "INSUFFICIENT_DATA": 0,
+        "LOW": 5,
+        "MEDIUM": 3
+      },
+      "QUALITY_INCIDENT": {
+        "HIGH": 1,
+        "INSUFFICIENT_DATA": 0,
+        "LOW": 4,
+        "MEDIUM": 3
+      },
+      "SPARSE": {
+        "HIGH": 1,
+        "INSUFFICIENT_DATA": 3,
+        "LOW": 0,
+        "MEDIUM": 0
+      },
+      "STABLE": {
+        "HIGH": 29,
+        "INSUFFICIENT_DATA": 0,
+        "LOW": 0,
+        "MEDIUM": 0
+      }
+    }
+  },
+  "validation_vs_ground_truth": {
+    "per_issue_type": {
+      "DELIVERY_BEFORE_DISPATCH": {
+        "detected": 3,
+        "injected": 3,
+        "recall": 1.0
+      },
+      "RISK_NO_SOURCE_OR_TIME": {
+        "detected": 3,
+        "injected": 3,
+        "recall": 1.0
+      },
+      "SCORE_USES_FUTURE_DATA": {
+        "detected": 3,
+        "injected": 3,
+        "recall": 1.0
+      },
+      "SHIPMENT_NO_PO": {
+        "detected": 3,
+        "injected": 3,
+        "recall": 1.0
+      },
+      "SITE_CONFLATION": {
+        "detected": 3,
+        "injected": 3,
+        "recall": 1.0
+      }
+    },
+    "precision": 1.0,
+    "recall": 1.0,
+    "status": "PASS"
+  }
+}

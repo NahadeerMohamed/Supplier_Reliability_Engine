@@ -1,0 +1,28 @@
+check,entity,record_id,detail,expected
+REQUIRED_FIELD,Shipment,SHP-2026-000751,po_id is null,True
+REQUIRED_FIELD,Shipment,SHP-2026-000753,po_id is null,True
+FK_INTEGRITY,Shipment,SHP-2026-000752,po_id not found in PurchaseOrder.po_id,True
+REQUIRED_FIELD,RiskSignal,RSK-SUP-000028-2026-01,signal_timestamp is null,True
+REQUIRED_FIELD,RiskSignal,RSK-SUP-000049-2026-03,signal_timestamp is null,True
+REQUIRED_FIELD,RiskSignal,RSK-SUP-000021-2026-02,source is null,True
+REQUIRED_FIELD,RiskSignal,RSK-SUP-000049-2026-03,source is null,True
+SITE_CONFLATION,Site,SITE-SUP-000029-02,site_id embeds a different supplier than supplier_id,True
+SITE_CONFLATION,Site,SITE-SUP-000032-02,site_id embeds a different supplier than supplier_id,True
+SITE_CONFLATION,Site,SITE-SUP-000002-02,site_id embeds a different supplier than supplier_id,True
+SITE_CONFLATION,Site,SITE-SUP-000029-02,address already registered to another supplier,True
+SITE_CONFLATION,Site,SITE-SUP-000032-02,address already registered to another supplier,True
+SITE_CONFLATION,Site,SITE-SUP-000002-02,address already registered to another supplier,True
+DATE_ORDER,Site,SITE-SUP-000029-02,effective_from before supplier onboarding,True
+DATE_ORDER,Site,SITE-SUP-000032-02,effective_from before supplier onboarding,True
+DATE_ORDER,Shipment,SHP-2026-000129,delivery_date precedes dispatch_date,True
+DATE_ORDER,Shipment,SHP-2026-000348,delivery_date precedes dispatch_date,True
+DATE_ORDER,Shipment,SHP-2026-000628,delivery_date precedes dispatch_date,True
+EVENT_SEQUENCE,Shipment,SHP-2026-000129,illegal or out-of-order delivery event,True
+EVENT_SEQUENCE,Shipment,SHP-2026-000348,illegal or out-of-order delivery event,True
+EVENT_SEQUENCE,Shipment,SHP-2026-000628,illegal or out-of-order delivery event,True
+SCORE_LEAKAGE,SupplierScore,SCORE-2026-000201,max_source_date after score_timestamp,True
+SCORE_LEAKAGE,SupplierScore,SCORE-2026-000202,max_source_date after score_timestamp,True
+SCORE_LEAKAGE,SupplierScore,SCORE-2026-000203,max_source_date after score_timestamp,True
+SCORE_REPRODUCIBILITY,SupplierScore,SCORE-2026-000201,re-scoring at 2026-03-31 gives a different result,True
+SCORE_REPRODUCIBILITY,SupplierScore,SCORE-2026-000202,re-scoring at 2026-03-31 gives a different result,True
+SCORE_REPRODUCIBILITY,SupplierScore,SCORE-2026-000203,re-scoring at 2026-03-31 gives a different result,True

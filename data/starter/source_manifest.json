@@ -1,0 +1,16 @@
+{
+  "external_data_used": false,
+  "fields_discarded": [],
+  "license": "Synthetic output may be freely redistributed with this repository.",
+  "schema_inspiration_only": [
+    {
+      "reference": "SCOR Digital Standard (ASCM) - perfect order fulfilment / delivery performance concepts",
+      "use": "metric naming only; no data used"
+    },
+    {
+      "reference": "ISO 9001 quality-management certification concept",
+      "use": "certification field semantics only"
+    }
+  ],
+  "statement": "All records are synthetic, produced by src/generator.py from a fixed seed. No external dataset was downloaded, transformed or redistributed, and no personal or confidential information is included. Supplier names and addresses are fabricated."
+}

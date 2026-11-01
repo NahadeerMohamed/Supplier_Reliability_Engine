@@ -1,0 +1,177 @@
+{
+  "anomaly_detection": {
+    "DELIVERY_BEFORE_DISPATCH": {
+      "detected": 3,
+      "detected_by": [
+        "DATE_ORDER",
+        "EVENT_SEQUENCE"
+      ],
+      "injected": 3,
+      "missed": [],
+      "recall": 1.0
+    },
+    "RISK_NO_SOURCE_OR_TIME": {
+      "detected": 3,
+      "detected_by": [
+        "REQUIRED_FIELD"
+      ],
+      "injected": 3,
+      "missed": [],
+      "recall": 1.0
+    },
+    "SCORE_USES_FUTURE_DATA": {
+      "detected": 3,
+      "detected_by": [
+        "SCORE_LEAKAGE",
+        "SCORE_REPRODUCIBILITY"
+      ],
+      "injected": 3,
+      "missed": [],
+      "recall": 1.0
+    },
+    "SHIPMENT_NO_PO": {
+      "detected": 3,
+      "detected_by": [
+        "FK_INTEGRITY",
+        "REQUIRED_FIELD"
+      ],
+      "injected": 3,
+      "missed": [],
+      "recall": 1.0
+    },
+    "SITE_CONFLATION": {
+      "detected": 3,
+      "detected_by": [
+        "DATE_ORDER",
+        "SITE_CONFLATION"
+      ],
+      "injected": 3,
+      "missed": [],
+      "recall": 1.0
+    }
+  },
+  "checks": {
+    "ARITHMETIC": {
+      "description": "Derived amounts, quantities and statuses reconcile to source rows.",
+      "findings": 0,
+      "on_ground_truth_records": 0,
+      "unexpected": 0
+    },
+    "DATE_ORDER": {
+      "description": "Chronology between related dates holds.",
+      "findings": 5,
+      "on_ground_truth_records": 5,
+      "unexpected": 0
+    },
+    "DUPLICATE": {
+      "description": "Business keys / full rows are not duplicated.",
+      "findings": 0,
+      "on_ground_truth_records": 0,
+      "unexpected": 0
+    },
+    "ENUM": {
+      "description": "Values belong to the allowed set.",
+      "findings": 0,
+      "on_ground_truth_records": 0,
+      "unexpected": 0
+    },
+    "EVENT_SEQUENCE": {
+      "description": "Event histories follow legal lifecycle transitions in time order.",
+      "findings": 3,
+      "on_ground_truth_records": 3,
+      "unexpected": 0
+    },
+    "FK_INTEGRITY": {
+      "description": "Foreign-key values exist in the parent table.",
+      "findings": 1,
+      "on_ground_truth_records": 1,
+      "unexpected": 0
+    },
+    "FUTURE_DATED": {
+      "description": "No source timestamp after the extract date.",
+      "findings": 0,
+      "on_ground_truth_records": 0,
+      "unexpected": 0
+    },
+    "ID_FORMAT": {
+      "description": "Primary key matches the ID convention.",
+      "findings": 0,
+      "on_ground_truth_records": 0,
+      "unexpected": 0
+    },
+    "LIFECYCLE_STATE": {
+      "description": "Current status equals the latest event; derived dates match events.",
+      "findings": 0,
+      "on_ground_truth_records": 0,
+      "unexpected": 0
+    },
+    "PK_UNIQUE": {
+      "description": "Primary key non-null and unique.",
+      "findings": 0,
+      "on_ground_truth_records": 0,
+      "unexpected": 0
+    },
+    "RELATIONSHIP": {
+      "description": "Denormalised supplier/site/PO references agree across entities.",
+      "findings": 0,
+      "on_ground_truth_records": 0,
+      "unexpected": 0
+    },
+    "REQUIRED_FIELD": {
+      "description": "Required fields are non-null.",
+      "findings": 6,
+      "on_ground_truth_records": 6,
+      "unexpected": 0
+    },
+    "SCHEMA": {
+      "description": "Required columns present.",
+      "findings": 0,
+      "on_ground_truth_records": 0,
+      "unexpected": 0
+    },
+    "SCORE_LEAKAGE": {
+      "description": "No source data after score_timestamp was used.",
+      "findings": 3,
+      "on_ground_truth_records": 3,
+      "unexpected": 0
+    },
+    "SCORE_RECONCILIATION": {
+      "description": "Score equals the sum of component contributions; tier/decision follow rules.",
+      "findings": 0,
+      "on_ground_truth_records": 0,
+      "unexpected": 0
+    },
+    "SCORE_REPRODUCIBILITY": {
+      "description": "Re-scoring the source data at the same cutoff reproduces the score.",
+      "findings": 3,
+      "on_ground_truth_records": 3,
+      "unexpected": 0
+    },
+    "SITE_CONFLATION": {
+      "description": "A site ID/address belongs to exactly one supplier.",
+      "findings": 6,
+      "on_ground_truth_records": 6,
+      "unexpected": 0
+    }
+  },
+  "row_counts": {
+    "Contract": 83,
+    "DeliveryEvent": 3162,
+    "Inspection": 1000,
+    "Invoice": 730,
+    "POLine": 1024,
+    "POStatusEvent": 1656,
+    "PurchaseOrder": 500,
+    "RiskSignal": 70,
+    "Shipment": 753,
+    "ShipmentLine": 1545,
+    "Site": 86,
+    "Supplier": 50,
+    "SupplierScore": 203,
+    "SupplierScoreComponent": 1218
+  },
+  "rule": "PASS = zero findings outside ground truth AND every injected anomaly detected",
+  "status": "PASS",
+  "unexpected_findings": [],
+  "unexpected_total": 0
+}
