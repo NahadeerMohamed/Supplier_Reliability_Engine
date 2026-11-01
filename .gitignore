@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.env
+# Full-scale output (~106 MB) is regenerated deterministically: python -m src.pipeline --scale full
+data/full/
+.claude/
